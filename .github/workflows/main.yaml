@@ -21,7 +21,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.REGION }}
+          aws-region: us-east-1
 
       # Firstly, insert your secrets in AWS Secret Manager
       # Then, you can retrieve the secrets based on your secret-id
@@ -49,7 +49,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.REGION }}
+          aws-region: us-east-1
 
       # Firstly, insert your parameter in AWS Systems Manager > Parameter Store
       # Then, you can retrieve the parameters using aws ssm get-parameter command
