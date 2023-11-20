@@ -1,4 +1,4 @@
-service: sturdy-disco
+service: assignment-3.13
 frameworkVersion: '3'
 
 provider:
