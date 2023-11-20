@@ -13,6 +13,3 @@ functions:
       - httpApi:
           path: /
           method: get
-
-plugins:
-  - serverless-offline
