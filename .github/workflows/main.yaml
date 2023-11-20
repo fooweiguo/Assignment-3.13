@@ -12,6 +12,55 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event"
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      
+  retrieve_secret:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.REGION }}
+
+      # Firstly, insert your secrets in AWS Secret Manager
+      # Then, you can retrieve the secrets based on your secret-id
+      # If you have multiple secret key and value pairs like mine, you can parse
+      # the entire json object and print the values you'd like to display/use
+
+      - name: Get Secret Object
+        run: |
+          secret_object=$(aws secretsmanager get-secret-value --secret-id prod/luqman/hobby --query SecretString --output json)
+
+          # Parse specific keys from the secret object
+          secret_value_hobby=$(echo "$secret_object" | jq -r '. | fromjson | .weiguo_hobby')
+          secret_value_food=$(echo "$secret_object" | jq -r '. | fromjson | .weiguo_favourite')
+          secret_value_loc=$(echo "$secret_object" | jq -r '. | fromjson | .weiguo_drinks')
+
+          echo "Secret value Hobby is: $secret_value_hobby"
+          echo "Secret value Favourite is: $secret_value_food"
+          echo "Secret value Drinks is: $secret_value_loc"
+
+  retrieve_parameters:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.REGION }}
+
+      # Firstly, insert your parameter in AWS Systems Manager > Parameter Store
+      # Then, you can retrieve the parameters using aws ssm get-parameter command
+
+      - name: Get parameter object
+        run: |
+          weiguo_height=$(aws ssm get-parameter --name weiguo_height --query Parameter.Value --output text)
+          echo "Wei Guo's height is: $weiguo_height meters." 
+
+          weiguo_phone=$(aws ssm get-parameter --name weiguo_phone --query Parameter.Value --output text)
+          echo "Wei Guo's phone is: $weiguo_phone" 
 
   install-dependencies:
     runs-on: ubuntu-latest
@@ -43,3 +92,5 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  
