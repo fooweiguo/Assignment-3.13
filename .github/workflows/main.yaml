@@ -30,7 +30,7 @@ jobs:
 
       - name: Get Secret Object
         run: |
-          secret_object=$(aws secretsmanager get-secret-value --secret-id prod/luqman/hobby --query SecretString --output json)
+          secret_object=$(aws secretsmanager get-secret-value --secret-id prod/appAlpha/weiguo --query SecretString --output json)
 
           # Parse specific keys from the secret object
           secret_value_hobby=$(echo "$secret_object" | jq -r '. | fromjson | .weiguo_hobby')
