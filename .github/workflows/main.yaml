@@ -76,7 +76,7 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
-    needs: install-dependencies
+    needs: [install-dependencies, retrieve_secret, retrieve_parameters]
     strategy:
       matrix:
         node-version: [18.x]
